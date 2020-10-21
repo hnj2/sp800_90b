@@ -1,0 +1,3 @@
+[submodule "nist_impl"]
+	path = nist_impl
+	url = https://github.com/usnistgov/SP800-90B_EntropyAssessment.git
