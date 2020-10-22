@@ -1,0 +1,6 @@
+# vim swap files
+**/.*.swp
+
+# build artifacts
+*.o
+*.so
