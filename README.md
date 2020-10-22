@@ -101,9 +101,9 @@ NIST-developed software is provided by NIST as a public service. You may use, co
 ### Modifications
 
 The modifications that were made were are:
-    - Adding the function `construct_data_t` in [`src/data_t.h`](src/data_t.h) with code copied from the `read_file_subset` function in [`nist_code/cpp/shared/utils.h`](nist_code/cpp/shared/utils.h).
-    - Adding the function `ea_iid` in [`src/iid_lib.cpp`](src/iid_lib.cpp) with code copied from the `main` function in [`nist_code/cpp/iid_main.cpp`](nist_code/cpp/iid_main.cpp).
-    - Adding pybind11 boilerplate code to create a python package.
+ - Adding the function `construct_data_t` in [`src/data_t.h`](src/data_t.h) with code copied from the `read_file_subset` function in [`nist_code/cpp/shared/utils.h`](nist_code/cpp/shared/utils.h).
+ - Adding the function `ea_iid` in [`src/iid_lib.cpp`](src/iid_lib.cpp) with code copied from the `main` function in [`nist_code/cpp/iid_main.cpp`](nist_code/cpp/iid_main.cpp).
+ - Adding pybind11 boilerplate code to create a python package.
 
 ## More Information
 
