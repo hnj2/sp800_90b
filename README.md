@@ -18,7 +18,7 @@ You should be using a virtual environment with at least python version 3.
 
 You can simply run:
 ```
-pip install -i https://test.pypi.org/simple/ sp800-90b
+pip install sp800-90b
 ```
 
 ### Using setuptools
