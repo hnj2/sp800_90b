@@ -1,6 +1,11 @@
 # vim swap files
 **/.*.swp
 
-# build artifacts
+# packaging artifacts
+dist/
+sp800_90b.egg-info/
+
+# manual build artifacts
 *.o
 *.so
+
