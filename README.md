@@ -29,6 +29,12 @@ Preferably in a virtual python environment do:
 pip install pybind11
 ```
 
+Don't forget to check out the submodule:
+```
+git submodule init
+git submodule update
+```
+
 ## Setuptools installation
 
 With the `setuptools` package installed you can run
