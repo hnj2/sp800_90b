@@ -50,43 +50,50 @@ to manually compile the package.
 
 **Note:** You will only be able to use it in the directory where the generated `.so` library is present.
 
+## Installing
+
+Use the python command `help(sp800_90b)` for documentation.
+
 ## Manual test
 
 The following commands can be used for a crude test of the package:
 ```
 (venv) hnj@prokrastinator:~/sp800_90b$ python
-Python 3.6.9 (default, Oct  8 2020, 12:12:24) 
-[GCC 8.4.0] on linux
-Type "help", "copyright", "credits" or "license" for more information.
->>> import sp800_90b
->>> import random
->>> sp800_90b.entropy_assesment_iid(bytes(random.getrandbits(8) for i in range(1000000)))
-Calculating baseline statistics...
-H_original: 7.883765
-H_bitstring: 0.998292
-min(H_original, 8 X H_bitstring): 7.883765
+Python 3.6.9 (default, Oct  8 2020, 12:12:24)
+Type 'copyright', 'credits' or 'license' for more information
+IPython 7.16.1 -- An enhanced Interactive Python. Type '?' for help.
 
-** Passed chi square tests
+In [1]: import random
 
-** Passed length of longest repeated substring test
+In [2]: r = bytes(random.getrandbits(8) for _ in range(1000000))
 
+In [3]: n = bytes(random.getrandbits(8) for _ in range(500000))
+
+In [4]: n = n + bytes(random.getrandbits(7) for _ in range(500000))
+
+In [5]: import sp800_90b
+
+In [6]: help(sp800_90b)
+
+
+In [7]: rd = sp800_90b.Data(r)
+
+In [8]: rd.iid_tests()
 Beginning initial tests...
 Beginning permutation tests... these may take some time
-** Passed IID permutation tests
+Out[8]: True
 
->>> sp800_90b.entropy_assesment_iid(bytes(random.getrandbits(7 + (i // 500000)) for i in range(1000000)))
-Calculating baseline statistics...
-H_original: 7.322926
-H_bitstring: 0.911240
-min(H_original, 8 X H_bitstring): 7.289921
+In [9]: rd.h_initial()
+Out[9]: 7.189185202883665
 
+In [10]: nd = sp800_90b.Data(n)
+
+In [11]: nd.iid_tests()
 igamc: UNDERFLOW
-** Failed chi square tests
+Out[11]: False
 
-** Passed length of longest repeated substring test
-
-Beginning initial tests...
-Beginning permutation tests... these may take some time
+In [12]: nd.h_initial()
+Out[12]: 5.194695581531671
 ```
 
 
@@ -101,9 +108,9 @@ NIST-developed software is provided by NIST as a public service. You may use, co
 ### Modifications
 
 The modifications that were made were are:
- - Adding the function `construct_data_t` in [`src/data_t.h`](src/data_t.h) with code copied from the `read_file_subset` function in [`nist_code/cpp/shared/utils.h`](nist_code/cpp/shared/utils.h).
- - Adding the function `ea_iid` in [`src/iid_lib.cpp`](src/iid_lib.cpp) with code copied from the `main` function in [`nist_code/cpp/iid_main.cpp`](nist_code/cpp/iid_main.cpp).
- - Adding pybind11 boilerplate code to create a python package.
+ - Adding a header file and some helper functions to wrap the provided nist code inside an object file that can be linked to other components ([`src/nist.hpp`](src/nist.hpp) ans [`src/nist.cpp`](src/nist.cpp)).
+ - Writing a class that provides the functionality of the nist code as a class interface ([`src/data.hpp`](src/data.hpp) ans [`src/data.cpp`](src/data.cpp)).
+ - Adding pybind11 bindings and boilderplate code to create a python package ([`src/bindings.cpp`](src/bindings.cpp), [`setup.py`](setup.py) and [`MANIFEST.in`](MANIFEST.in)).
 
 ## More Information
 

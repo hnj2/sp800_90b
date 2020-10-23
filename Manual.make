@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -O3 -std=c++11 -shared -fPIC -fopenmp
+CXXFLAGS = -O0 -g -std=c++11 -shared -fPIC -fopenmp
 #CXX = clang++-8
 #CXXFLAGS = -Wno-padded -Wno-disabled-macro-expansion -Wno-gnu-statement-expression -Wno-bad-function-cast -fopenmp -O1 -fsanitize=address -fsanitize=undefined -fdenormal-fp-math=ieee -msse2 -march=native
 #static analysis in clang using
@@ -8,6 +8,7 @@ LIB = -lbz2 -lpthread -ldivsufsort
 INC = -Inist_impl/cpp $(shell python -m pybind11 --includes)
 
 LIBRARY = sp800_90b$(shell python3-config --extension-suffix)
+OBJECTS = data.o bindings.o nist.o
 
 ######
 # Main operations
@@ -15,11 +16,11 @@ LIBRARY = sp800_90b$(shell python3-config --extension-suffix)
 
 all: $(LIBRARY)
 
-$(LIBRARY): iid_lib.o
-	$(CXX) $(CXXFLAGS) iid_lib.o $(LIB) -o $(LIBRARY)
+$(LIBRARY): $(OBJECTS)
+	$(CXX) $(CXXFLAGS) $^ $(LIB) -o $@
+
+%.o: src/%.cpp
+	$(CXX) $(CXXFLAGS) $(INC) $< -c -o $@
 
 clean:
-	rm -f iid_lib.o $(LIBRARY)
-
-iid_lib.o: src/*
-	$(CXX) $(CXXFLAGS) $(INC) src/iid_lib.cpp -c -o iid_lib.o
+	rm -f $(OBJECTS) $(LIBRARY)

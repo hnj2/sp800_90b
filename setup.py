@@ -30,7 +30,7 @@ ext_modules = [
         'sp800_90b',
         # Sort input source files to ensure bit-for-bit reproducible builds
         # (https://github.com/pybind/python_example/pull/53)
-        sorted(['src/iid_lib.cpp']),
+        sorted(['src/bindings.cpp', 'src/data.cpp', 'src/nist.cpp']),
         include_dirs=[
             # Path to pybind11 headers
             get_pybind_include(),
