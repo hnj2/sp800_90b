@@ -11,7 +11,7 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
-#os.system('sudo apt install libbz2-dev libdivsufsort-dev build-essential')
+os.system('sudo apt install libbz2-dev libdivsufsort-dev build-essential')
 os.system('cd .. && python setup.py install')
 
 import sys
