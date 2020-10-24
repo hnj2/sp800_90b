@@ -1,0 +1,417 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EntropyAssessment &#8212; sp800-90b 0.1.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="entropyassessment">
+<h1>EntropyAssessment<a class="headerlink" href="#entropyassessment" title="Permalink to this headline">¶</a></h1>
+<p>Cryptographic random bit generators (RBGs), also known as random number generators (RNGs), require a noise source that produces digital outputs with some level of unpredictability, expressed as min-entropy. <a class="reference external" href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-90B.pdf">SP 800-90B</a> provides a standardized means of estimating the quality of a source of entropy.</p>
+<div class="section" id="installing">
+<h2>Installing<a class="headerlink" href="#installing" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h3>
+<p>You will need to have the <code class="docutils literal notranslate"><span class="pre">bz2</span></code> and ‘divsufsort’ libraries installed, as well as a g++-compatible compiler that suports c++11.
+On debian/ubuntu like systems the following command sould be sufficient:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">libbz2</span><span class="o">-</span><span class="n">dev</span> <span class="n">libdivsufsort</span><span class="o">-</span><span class="n">dev</span> <span class="n">build</span><span class="o">-</span><span class="n">essential</span>
+</pre></div>
+</div>
+<p>You should be using a virtual environment with at least python version 3.</p>
+</div>
+<div class="section" id="using-pip">
+<h3>Using pip<a class="headerlink" href="#using-pip" title="Permalink to this headline">¶</a></h3>
+<p>You can simply run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">sp800</span><span class="o">-</span><span class="mi">90</span><span class="n">b</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="using-setuptools">
+<h3>Using setuptools<a class="headerlink" href="#using-setuptools" title="Permalink to this headline">¶</a></h3>
+<p>Don’t forget to check out the <code class="docutils literal notranslate"><span class="pre">nist_impl</span></code> submodule:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">submodule</span> <span class="n">init</span>
+<span class="n">git</span> <span class="n">submodule</span> <span class="n">update</span>
+</pre></div>
+</div>
+<p>You will also need the <code class="docutils literal notranslate"><span class="pre">setuptools</span></code> and the <code class="docutils literal notranslate"><span class="pre">pybind11</span></code> python package:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">setuptools</span> <span class="n">pybind11</span>
+</pre></div>
+</div>
+<p>Now you can install the package using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">build</span>
+<span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="manual-compilation">
+<h3>Manual compilation<a class="headerlink" href="#manual-compilation" title="Permalink to this headline">¶</a></h3>
+<p>With the same prerequisites as in the setuptools installation you can also run</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="o">-</span><span class="n">f</span> <span class="n">Manual</span><span class="o">.</span><span class="n">make</span>
+</pre></div>
+</div>
+<p>to manually compile the package.</p>
+<p><strong>Note:</strong> You will only be able to use it in the directory where the generated <code class="docutils literal notranslate"><span class="pre">.so</span></code> library is present.</p>
+</div>
+</div>
+<div class="section" id="id1">
+<h2>Installing<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>Use the python command <code class="docutils literal notranslate"><span class="pre">help(sp800_90b)</span></code> for documentation.</p>
+</div>
+<div class="section" id="manual-test">
+<h2>Manual test<a class="headerlink" href="#manual-test" title="Permalink to this headline">¶</a></h2>
+<p>The following commands can be used for a crude test of the package:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>(venv) hnj@prokrastinator:~/sp800_90b$ python
+Python 3.6.9 (default, Oct  8 2020, 12:12:24)
+Type &#39;copyright&#39;, &#39;credits&#39; or &#39;license&#39; for more information
+IPython 7.16.1 -- An enhanced Interactive Python. Type &#39;?&#39; for help.
+
+In [1]: import random
+
+In [2]: r = bytes(random.getrandbits(8) for _ in range(1000000))
+
+In [3]: n = bytes(random.getrandbits(8) for _ in range(500000))
+
+In [4]: n = n + bytes(random.getrandbits(7) for _ in range(500000))
+
+In [5]: import sp800_90b
+
+In [6]: help(sp800_90b)
+
+
+In [7]: rd = sp800_90b.Data(r)
+
+In [8]: rd.iid_tests()
+Beginning initial tests...
+Beginning permutation tests... these may take some time
+Out[8]: True
+
+In [9]: rd.h_initial()
+Out[9]: 7.189185202883665
+
+In [10]: nd = sp800_90b.Data(n)
+
+In [11]: nd.iid_tests()
+igamc: UNDERFLOW
+Out[11]: False
+
+In [12]: nd.h_initial()
+Out[12]: 5.194695581531671
+</pre></div>
+</div>
+</div>
+<div class="section" id="disclaimer">
+<h2>Disclaimer<a class="headerlink" href="#disclaimer" title="Permalink to this headline">¶</a></h2>
+<p>This software is a repackaged and slightly modified version of a NIST-developed project <a class="reference external" href="https://github.com/usnistgov/SP800-90B_EntropyAssessment">(that can be found here: https://github.com/usnistgov/SP800-90B_EntropyAssessment)</a>.</p>
+<div class="section" id="original-nist-disclaimer">
+<h3>Original NIST Disclaimer<a class="headerlink" href="#original-nist-disclaimer" title="Permalink to this headline">¶</a></h3>
+<p>NIST-developed software is provided by NIST as a public service. You may use, copy and distribute copies of the software in any medium, provided that you keep intact this entire notice. You may improve, modify and create derivative works of the software or any portion of the software, and you may distribute such modifications or works. Modified works should carry a notice stating that you changed the software and should note the date and nature of any such change. Please explicitly acknowledge the National Institute of Standards and Technology as the source of the software.</p>
+</div>
+<div class="section" id="modifications">
+<h3>Modifications<a class="headerlink" href="#modifications" title="Permalink to this headline">¶</a></h3>
+<p>The modifications that were made were are:</p>
+<ul class="simple">
+<li><p>Adding a header file and some helper functions to wrap the provided nist code inside an object file that can be linked to other components (<cite>``src/nist.hpp`</cite> &lt;src/nist.hpp&gt;`_ ans <cite>``src/nist.cpp`</cite> &lt;src/nist.cpp&gt;`_).</p></li>
+<li><p>Writing a class that provides the functionality of the nist code as a class interface (<cite>``src/data.hpp`</cite> &lt;src/data.hpp&gt;`_ ans <cite>``src/data.cpp`</cite> &lt;src/data.cpp&gt;`_).</p></li>
+<li><p>Adding pybind11 bindings and boilderplate code to create a python package (<cite>``src/bindings.cpp`</cite> &lt;src/bindings.cpp&gt;`_, <cite>``setup.py`</cite> &lt;setup.py&gt;`_ and <cite>``MANIFEST.in`</cite> &lt;MANIFEST.in&gt;`_).</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="more-information">
+<h2>More Information<a class="headerlink" href="#more-information" title="Permalink to this headline">¶</a></h2>
+<p>For more information on the nist code that is running, <a class="reference external" href="https://github.com/usnistgov/SP800-90B_EntropyAssessment">look into the original repository</a>.</p>
+<p>For more information on the estimation methods, see <a class="reference external" href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-90B.pdf">SP 800-90B</a>.</p>
+</div>
+</div>
+<div class="section" id="module-sp800_90b">
+<span id="api"></span><h1>API<a class="headerlink" href="#module-sp800_90b" title="Permalink to this headline">¶</a></h1>
+<p>SP 800-90B entropy assesment, using the nist-provided implementation.</p>
+<dl class="py class">
+<dt id="sp800_90b.Data">
+<em class="property">class </em><code class="sig-prename descclassname">sp800_90b.</code><code class="sig-name descname">Data</code><a class="headerlink" href="#sp800_90b.Data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Samples that can be assessed for entropy.</p>
+<dl class="py method">
+<dt id="sp800_90b.Data.chi_square_tests">
+<code class="sig-name descname">chi_square_tests</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#sp800_90b.Data" title="sp800_90b.Data">sp800_90b.Data</a></span></em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sp800_90b.Data.chi_square_tests" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests if the data is independently and identically distributed using Pearson’s chi-squared test.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.h_bitstring_collision">
+<code class="sig-name descname">h_bitstring_collision</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#sp800_90b.Data" title="sp800_90b.Data">sp800_90b.Data</a></span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#sp800_90b.Data.h_bitstring_collision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimates the entropy of the data as a bistring with a collision test (Section 6.3.2).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.h_bitstring_compression">
+<code class="sig-name descname">h_bitstring_compression</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#sp800_90b.Data" title="sp800_90b.Data">sp800_90b.Data</a></span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#sp800_90b.Data.h_bitstring_compression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimates the entropy of the data as a bistring with a compression test (Section 6.3.4).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.h_bitstring_lag_prediction">
+<code class="sig-name descname">h_bitstring_lag_prediction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#sp800_90b.Data" title="sp800_90b.Data">sp800_90b.Data</a></span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#sp800_90b.Data.h_bitstring_lag_prediction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimates the entrop of the data as a bistringy with a lag prediction test (Section 6.3.8).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.h_bitstring_lz78y">
+<code class="sig-name descname">h_bitstring_lz78y</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#sp800_90b.Data" title="sp800_90b.Data">sp800_90b.Data</a></span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#sp800_90b.Data.h_bitstring_lz78y" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimates the entropy of the data as a bistring with a LZ78Y test (Section 6.3.10).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.h_bitstring_markov">
+<code class="sig-name descname">h_bitstring_markov</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#sp800_90b.Data" title="sp800_90b.Data">sp800_90b.Data</a></span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#sp800_90b.Data.h_bitstring_markov" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimates the entropy of the data as a bistring with a markov test (Section 6.3.3).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.h_bitstring_max">
+<code class="sig-name descname">h_bitstring_max</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#sp800_90b.Data" title="sp800_90b.Data">sp800_90b.Data</a></span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#sp800_90b.Data.h_bitstring_max" title="Permalink to this definition">¶</a></dt>
+<dd><p>The maximal entropy for the bitstring data (is 1.0).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.h_bitstring_min_all">
+<code class="sig-name descname">h_bitstring_min_all</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#sp800_90b.Data" title="sp800_90b.Data">sp800_90b.Data</a></span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#sp800_90b.Data.h_bitstring_min_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the minimum of the entropy estimates for the data in bitstring form.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.h_bitstring_most_common">
+<code class="sig-name descname">h_bitstring_most_common</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#sp800_90b.Data" title="sp800_90b.Data">sp800_90b.Data</a></span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#sp800_90b.Data.h_bitstring_most_common" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimates the entropy of the data as a bistring with the most common value (Section 3.6.1).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.h_bitstring_multi_markov">
+<code class="sig-name descname">h_bitstring_multi_markov</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#sp800_90b.Data" title="sp800_90b.Data">sp800_90b.Data</a></span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#sp800_90b.Data.h_bitstring_multi_markov" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimates the entropy of the data as a bistring with a multi markov model with counting test (Section 6.3.9).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.h_bitstring_multi_most_common">
+<code class="sig-name descname">h_bitstring_multi_most_common</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#sp800_90b.Data" title="sp800_90b.Data">sp800_90b.Data</a></span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#sp800_90b.Data.h_bitstring_multi_most_common" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimates the entropy of the data as a bistring with a multi most common in window test (Section 6.3.7).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.h_bitstring_t_tuple_and_lrs">
+<code class="sig-name descname">h_bitstring_t_tuple_and_lrs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#sp800_90b.Data" title="sp800_90b.Data">sp800_90b.Data</a></span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>float<span class="p">, </span>float<span class="p">]</span><a class="headerlink" href="#sp800_90b.Data.h_bitstring_t_tuple_and_lrs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimates the entropy of the data as a bistring with a t-tuple and a lrs test (Sections 6.3.5 and 6.3.6).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.h_both">
+<code class="sig-name descname">h_both</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#sp800_90b.Data" title="sp800_90b.Data">sp800_90b.Data</a></span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>float<span class="p">, </span>float<span class="p">]</span><a class="headerlink" href="#sp800_90b.Data.h_both" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes both entropy estimates.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.h_collision">
+<code class="sig-name descname">h_collision</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#sp800_90b.Data" title="sp800_90b.Data">sp800_90b.Data</a></span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#sp800_90b.Data.h_collision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimates the entropy with a collision test (Section 6.3.2).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.h_compression">
+<code class="sig-name descname">h_compression</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#sp800_90b.Data" title="sp800_90b.Data">sp800_90b.Data</a></span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#sp800_90b.Data.h_compression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimates the entropy with a compression test (Section 6.3.4).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.h_conditioned">
+<code class="sig-name descname">h_conditioned</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#sp800_90b.Data" title="sp800_90b.Data">sp800_90b.Data</a></span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#sp800_90b.Data.h_conditioned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the entropy estimate foa a conditioned seqauential dataset (Section 3.1.5.2).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.h_initial">
+<code class="sig-name descname">h_initial</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#sp800_90b.Data" title="sp800_90b.Data">sp800_90b.Data</a></span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#sp800_90b.Data.h_initial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the initial entropy estimate (Section 3.1.3).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.h_lag_prediction">
+<code class="sig-name descname">h_lag_prediction</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#sp800_90b.Data" title="sp800_90b.Data">sp800_90b.Data</a></span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#sp800_90b.Data.h_lag_prediction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimates the entropy with a lag prediction test (Section 6.3.8).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.h_lz78y">
+<code class="sig-name descname">h_lz78y</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#sp800_90b.Data" title="sp800_90b.Data">sp800_90b.Data</a></span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#sp800_90b.Data.h_lz78y" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimates the entropy with a LZ78Y test (Section 6.3.10).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.h_markov">
+<code class="sig-name descname">h_markov</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#sp800_90b.Data" title="sp800_90b.Data">sp800_90b.Data</a></span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#sp800_90b.Data.h_markov" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimates the entropy with a markov test (Section 6.3.3).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.h_max">
+<code class="sig-name descname">h_max</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#sp800_90b.Data" title="sp800_90b.Data">sp800_90b.Data</a></span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#sp800_90b.Data.h_max" title="Permalink to this definition">¶</a></dt>
+<dd><p>The maximal entropy for the dataset (word_size).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.h_min_all">
+<code class="sig-name descname">h_min_all</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#sp800_90b.Data" title="sp800_90b.Data">sp800_90b.Data</a></span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#sp800_90b.Data.h_min_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the minimum of the entropy estimates for the original data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.h_most_common">
+<code class="sig-name descname">h_most_common</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#sp800_90b.Data" title="sp800_90b.Data">sp800_90b.Data</a></span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#sp800_90b.Data.h_most_common" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimates the entropy with the most common value (Section 3.6.1).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.h_multi_markov">
+<code class="sig-name descname">h_multi_markov</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#sp800_90b.Data" title="sp800_90b.Data">sp800_90b.Data</a></span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#sp800_90b.Data.h_multi_markov" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimates the entropy with a multi markov model with counting test (Section 6.3.9).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.h_multi_most_common">
+<code class="sig-name descname">h_multi_most_common</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#sp800_90b.Data" title="sp800_90b.Data">sp800_90b.Data</a></span></em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#sp800_90b.Data.h_multi_most_common" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimates the entropy with a multi most common in window test (Section 6.3.7).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.h_t_tuple_and_lrs">
+<code class="sig-name descname">h_t_tuple_and_lrs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#sp800_90b.Data" title="sp800_90b.Data">sp800_90b.Data</a></span></em><span class="sig-paren">)</span> &#x2192; Tuple<span class="p">[</span>float<span class="p">, </span>float<span class="p">]</span><a class="headerlink" href="#sp800_90b.Data.h_t_tuple_and_lrs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimates the entropy with a t-tuple and a lrs test (Sections 6.3.5 and 6.3.6).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.iid_tests">
+<code class="sig-name descname">iid_tests</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#sp800_90b.Data" title="sp800_90b.Data">sp800_90b.Data</a></span></em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sp800_90b.Data.iid_tests" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests if the data is independently and identically distributed using <cite>chi_square_test</cite>, <cite>lrs_tests</cite> and <cite>permutation_tests</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.is_binary">
+<em class="property">property </em><code class="sig-name descname">is_binary</code><a class="headerlink" href="#sp800_90b.Data.is_binary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether the data only consisty of two different symbols.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.lrs_tests">
+<code class="sig-name descname">lrs_tests</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#sp800_90b.Data" title="sp800_90b.Data">sp800_90b.Data</a></span></em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sp800_90b.Data.lrs_tests" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests if the data is independently and identically distributed using an LSR test.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.median">
+<em class="property">property </em><code class="sig-name descname">median</code><a class="headerlink" href="#sp800_90b.Data.median" title="Permalink to this definition">¶</a></dt>
+<dd><p>Statistical median value of the data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.permutation_tests">
+<code class="sig-name descname">permutation_tests</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span><span class="p">:</span> <span class="n"><a class="reference internal" href="#sp800_90b.Data" title="sp800_90b.Data">sp800_90b.Data</a></span></em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sp800_90b.Data.permutation_tests" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests if the data is independently and identically distributed using permutations.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="sp800_90b.Data.rawmean">
+<em class="property">property </em><code class="sig-name descname">rawmean</code><a class="headerlink" href="#sp800_90b.Data.rawmean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Statistical mean value of the data.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">sp800-90b</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Hans Niklas Jacob.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

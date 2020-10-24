@@ -35,6 +35,7 @@ release = '0.1.0'
 extensions = [
     'm2r2',
     'sphinx.ext.autodoc',
+    'sphinx.ext.githubpages',
 ]
 
 # Add any paths that contain templates here, relative to this directory.

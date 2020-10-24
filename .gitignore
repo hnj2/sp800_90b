@@ -9,6 +9,3 @@ sp800_90b.egg-info/
 *.o
 *.so
 
-
-# documentation build artifacts
-docs/_build/
