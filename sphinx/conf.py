@@ -11,7 +11,7 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
-os.system('cd .. && python setup.py build -f')
+os.system('cd .. && python setup.py build')
 os.system('cd .. && python setup.py install')
 
 import sys
@@ -25,7 +25,7 @@ copyright = '2020, Hans Niklas Jacob'
 author = 'Hans Niklas Jacob'
 
 # The full version, including alpha/beta/rc tags
-release = '0.1.0'
+release = '0.1.1'
 
 
 # -- General configuration ---------------------------------------------------

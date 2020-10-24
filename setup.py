@@ -6,7 +6,7 @@ from setuptools.command.build_ext import build_ext
 import sys
 import setuptools
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 
 # read the contents of your README file
 from os import path
