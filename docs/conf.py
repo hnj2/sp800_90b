@@ -11,8 +11,7 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
-os.system('sudo apt install libbz2-dev libdivsufsort-dev build-essential')
-os.system('cd .. && python setup.py install')
+os.system('pip install sp800_90b --no-cache-dir')
 
 import sys
 sys.path.insert(0, os.path.abspath('..'))
@@ -34,6 +33,7 @@ release = '0.1.0'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'm2r2',
     'sphinx.ext.autodoc',
 ]
 
