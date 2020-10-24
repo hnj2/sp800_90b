@@ -2,6 +2,10 @@
 
 Cryptographic random bit generators (RBGs), also known as random number generators (RNGs), require a noise source that produces digital outputs with some level of unpredictability, expressed as min-entropy. [SP 800-90B](https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-90B.pdf) provides a standardized means of estimating the quality of a source of entropy.
 
+## Documentation
+
+View the [documentation here (https://hnj2.github.io/sp800_90b/)](https://hnj2.github.io/sp800_90b/).
+
 ## Installing
 
 ### Prerequisites
