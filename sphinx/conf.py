@@ -11,10 +11,11 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
-os.system('pip install sp800_90b -U --no-cache-dir')
+os.system('cd .. && python setup.py build -f')
+os.system('cd .. && python setup.py install')
 
-#import sys
-#sys.path.insert(0, os.path.abspath('..'))
+import sys
+sys.path.insert(0, os.path.abspath('..'))
 
 
 # -- Project information -----------------------------------------------------

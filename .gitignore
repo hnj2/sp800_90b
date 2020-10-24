@@ -9,3 +9,5 @@ sp800_90b.egg-info/
 *.o
 *.so
 
+# sphinx artifacts
+sphinx/_build/
